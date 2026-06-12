@@ -1,0 +1,6 @@
+ticker,reason
+BADCO,Sanctions list
+FRDC,OFAC restricted
+XBAD,Regulatory embargo
+BLKL,Internal blacklist
+RSTR,Compliance restricted

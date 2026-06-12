@@ -1,0 +1,26 @@
+ticker,name,asset_class,sector,weight_pct
+AAPL,Apple Inc,Equity,Technology,31.00
+MSFT,Microsoft Corp,Equity,Technology,10.50
+AMZN,Amazon.com Inc,Equity,Consumer Discretionary,8.50
+GOOGL,Alphabet Inc,Equity,Technology,7.00
+META,Meta Platforms,Equity,Technology,5.00
+NVDA,NVIDIA Corp,Equity,Technology,4.00
+BADCO,Bad Company Ltd,Equity,Financials,2.80
+JPM,JPMorgan Chase,Equity,Financials,2.60
+JNJ,Johnson & Johnson,Equity,Healthcare,2.50
+V,Visa Inc,Equity,Financials,2.40
+PG,Procter & Gamble,Equity,Consumer Staples,2.30
+UNH,UnitedHealth Group,Equity,Healthcare,2.20
+HD,Home Depot,Equity,Consumer Discretionary,2.10
+MA,Mastercard Inc,Equity,Financials,2.00
+XOM,Exxon Mobil,Equity,Energy,1.90
+LLY,Eli Lilly,Equity,Healthcare,1.80
+CVX,Chevron Corp,Equity,Energy,1.70
+ABBV,AbbVie Inc,Equity,Healthcare,1.60
+MRK,Merck & Co,Equity,Healthcare,1.50
+PEP,PepsiCo Inc,Equity,Consumer Staples,1.40
+KO,Coca-Cola Co,Equity,Consumer Staples,1.30
+BAC,Bank of America,Equity,Financials,1.20
+WMT,Walmart Inc,Equity,Consumer Staples,1.00
+DIS,Walt Disney Co,Equity,Communication Services,0.80
+CSCO,Cisco Systems,Equity,Technology,0.60

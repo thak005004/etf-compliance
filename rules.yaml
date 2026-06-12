@@ -1,0 +1,36 @@
+rules_version: "1.0.0"
+
+rules:
+  max_single_holding:
+    description: "No single holding may exceed this weight"
+    threshold: 25.0
+    severity: high
+
+  top5_concentration:
+    description: "Top 5 holdings combined weight must not exceed this"
+    threshold: 50.0
+    severity: high
+
+  weights_sum:
+    description: "All weights must sum to 100% within tolerance"
+    target: 100.0
+    tolerance: 0.5
+    severity: high
+
+  restricted_list:
+    description: "No holding may appear on the restricted ticker list"
+    file: samples/restricted.csv
+    severity: high
+
+  max_sector:
+    description: "No single sector may exceed this combined weight"
+    threshold: 40.0
+    severity: medium
+
+  min_holdings_count:
+    description: "Portfolio must hold at least this many distinct tickers"
+    threshold: 20
+    severity: medium
+
+reconciliation:
+  weight_diff_tolerance_pp: 0.1
