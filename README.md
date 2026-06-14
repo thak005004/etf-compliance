@@ -117,3 +117,5 @@ The weights-sum rule assumes the input file represents 100% of the portfolio. Fu
 **Multi-format vendor ingestion via SFTP.** Custodians deliver holdings in Bloomberg BVAL, FactSet, or proprietary flat-file formats. A vendor-adaptor layer (one module per custodian) would normalize to the internal DataFrame schema and drop files to S3, triggering the engine automatically. SFTP polling via AWS Transfer Family, delivery confirmation via SNS, and a dead-letter queue for files that fail normalization.
 
 **Scheduled checks with alerting.** A daily Lambda (or ECS Fargate scheduled task) that re-runs compliance against the prior day's holdings from S3, writes results to the audit DB, and pages the operations team via PagerDuty or SNS if any HIGH-severity violation is open and unacknowledged for more than 24 hours. Trend data from the existing audit log feeds directly into this without schema changes.
+
+Built in about a day with AI assistance (Claude Code), reviewed and tested by me.
