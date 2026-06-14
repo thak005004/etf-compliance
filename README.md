@@ -29,6 +29,14 @@ python cli.py holdings.csv --rules custom_rules.yaml
 
 Set `ANTHROPIC_API_KEY` in your environment (or in `.streamlit/secrets.toml`) and click "Draft summary memo" on any run with violations. The button calls `claude-sonnet-4-6` and returns a plain-English memo with severity assessment and recommended remediation. The button is silently hidden if no key is configured, so the app never errors in demo mode.
 
+## Running the tests
+
+```bash
+python3.12 -m pytest tests/ -v
+```
+
+Requires Python 3.12+. If `python3` on your machine is an Anaconda build you may hit an Intel MKL error; use `python3.12` explicitly (e.g. from Homebrew or python.org) to avoid it.
+
 ## Holdings CSV format
 
 | Column | Type | Notes |
