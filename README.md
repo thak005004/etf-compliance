@@ -1,8 +1,6 @@
 # ETF Compliance Checker
 
-A portfolio compliance tool for ETF operations teams, compliance analysts, and fund administrators who need a fast, auditable way to verify that a fund's holdings satisfy concentration limits, restricted-ticker policies, and weights-sum constraints before NAV publication or regulatory filing. Upload a holdings CSV, see which rules pass or fail, acknowledge exceptions with a name and reason that persists to an audit log, reconcile weights against a vendor file, and track the compliance history of every run — including which exact version of the rules was in effect.
-
----
+A portfolio compliance tool for ETF operations teams, compliance analysts, and fund administrators who need a fast, auditable way to verify that a fund's holdings satisfy concentration limits, restricted-ticker policies, and weights-sum constraints before NAV publication or regulatory filing. Upload a holdings CSV, see which rules pass or fail, acknowledge exceptions with a name and reason that persists to an audit log, reconcile weights against a vendor file, and track the compliance history of every run, including which exact version of the rules was in effect.
 
 ## Quickstart
 
@@ -27,9 +25,7 @@ python cli.py holdings.csv --rules custom_rules.yaml
 
 **AI-drafted compliance memo**
 
-Set `ANTHROPIC_API_KEY` in your environment (or in `.streamlit/secrets.toml`) and click "Draft summary memo" on any run with violations. The button calls `claude-sonnet-4-6` and returns a plain-English memo with severity assessment and recommended remediation. The button is silently hidden if no key is configured — the app never errors in demo mode.
-
----
+Set `ANTHROPIC_API_KEY` in your environment (or in `.streamlit/secrets.toml`) and click "Draft summary memo" on any run with violations. The button calls `claude-sonnet-4-6` and returns a plain-English memo with severity assessment and recommended remediation. The button is silently hidden if no key is configured, so the app never errors in demo mode.
 
 ## Holdings CSV format
 
@@ -41,8 +37,6 @@ Set `ANTHROPIC_API_KEY` in your environment (or in `.streamlit/secrets.toml`) an
 | `asset_class` | string | Used for the exposure breakdown chart |
 
 See `samples/` for working examples.
-
----
 
 ## Rules and how to edit `rules.yaml`
 
@@ -81,34 +75,28 @@ reconciliation:
 
 Thresholds can also be overridden per-session in the sidebar without touching the file. Every run hashes the exact YAML bytes and stores the hash in the audit log, so you always know which rule version produced a given result.
 
----
-
 ## Design decisions
 
 **Data-quality errors are separated from compliance violations.**  
-Before running any compliance rule the engine validates the raw CSV: duplicate tickers, missing weights, non-numeric weights, and negative weights all surface as `error`-category issues and halt compliance checking. This mirrors how a real operations workflow works — a file with bad data should never generate a compliance pass or fail, it should route to a data-fix queue.
+Before running any compliance rule the engine validates the raw CSV: duplicate tickers, missing weights, non-numeric weights, and negative weights all surface as `error`-category issues and halt compliance checking. This mirrors how a real operations workflow works: a file with bad data should never generate a compliance pass or fail, it should route to a data-fix queue.
 
 **Check functions are pure and independently tested.**  
 `checks.py` contains one function per rule, each accepting a clean DataFrame and threshold parameters and returning a list of result dicts. `engine.py` is the only orchestrator that knows about files, YAML, and the audit log. This split means the 10 check-level unit tests have no filesystem dependencies and run in milliseconds, while the 8 engine tests verify the full pipeline including DQ gating.
 
 **SQLite audit log with file + rules hashes for provenance.**  
-Every run writes a row to `audit.db` containing a SHA-256 of the uploaded file bytes and a SHA-256 of the exact YAML used (after sidebar overrides are applied). The Past Runs tab shows both hashes (truncated to 12 chars for readability). This answers "which data, under which rules" for any historical run without storing the files themselves.
+Every run writes a row to `audit.db` containing a SHA-256 of the uploaded file bytes and a SHA-256 of the exact YAML used (after sidebar overrides are applied). The Past Runs tab shows both hashes (truncated to 12 chars for readability). This answers "which data, under which rules" for any historical run, without storing the files themselves.
 
 **Persisted exception acknowledgments as evidence capture.**  
 Acknowledging a violation requires a name and a free-text reason; both are written to an `acknowledgments` table keyed to `(run_id, exception_index)`. Acknowledgments survive app restarts and are shown inline with the exception they cover. The download report CSV includes ack metadata. This is the minimum evidence trail an operations team would need to demonstrate to an auditor that an exception was reviewed and deliberately accepted.
 
 **SQLite for the prototype; Postgres + ECS + S3 in production.**  
-SQLite requires zero infrastructure and works well for single-process use. A production deployment would replace the `audit.db` connection with Postgres on AWS RDS (swap `sqlite3` for `psycopg2`, same schema), run the Streamlit app as a container on ECS Fargate behind an ALB, and accept holdings files via an S3 bucket event trigger rather than a browser upload — the engine is already a pure function that accepts a DataFrame, so the intake path is the only thing that changes.
-
----
+SQLite requires zero infrastructure and works well for single-process use. A production deployment would replace the `audit.db` connection with Postgres on AWS RDS (swap `sqlite3` for `psycopg2`, same schema), run the Streamlit app as a container on ECS Fargate behind an ALB, and accept holdings files via an S3 bucket event trigger rather than a browser upload. The engine is already a pure function that accepts a DataFrame, so the intake path is the only thing that changes.
 
 ## Assumptions
 
 The thresholds in `rules.yaml` are illustrative starting points. They are not legal advice and do not constitute a compliance program. Real ETFs operate under concentration limits defined in their prospectus, SAI, and the Investment Company Act of 1940 (Section 5 diversification tests for registered investment companies, 80% name-test requirements for index funds, etc.). Any production deployment requires rule sets reviewed and approved by fund counsel and mapped explicitly to the fund's investment objective and regulatory classification.
 
 The weights-sum rule assumes the input file represents 100% of the portfolio. Funds with short positions, derivatives overlays, or cash allocations treated separately will need a more nuanced check.
-
----
 
 ## What I'd build next
 
