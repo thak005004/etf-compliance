@@ -2,6 +2,8 @@
 
 A portfolio compliance tool for ETF operations teams, compliance analysts, and fund administrators who need a fast, auditable way to verify that a fund's holdings satisfy concentration limits, restricted-ticker policies, and weights-sum constraints before NAV publication or regulatory filing. Upload a holdings CSV, see which rules pass or fail, acknowledge exceptions with a name and reason that persists to an audit log, reconcile weights against a vendor file, and track the compliance history of every run, including which exact version of the rules was in effect.
 
+Live app: https://etf-compliance.streamlit.app/
+
 ## Quickstart
 
 ```bash
